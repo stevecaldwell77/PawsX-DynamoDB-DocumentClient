@@ -11,15 +11,165 @@ __END__
 
 =head1 NAME
 
-PawsX::DynamoDB::DocumentClient - Blah blah blah
+PawsX::DynamoDB::DocumentClient - a simplified way of working with AWS DynamoDB items that uses Paws under the hood.
 
 =head1 SYNOPSIS
 
   use PawsX::DynamoDB::DocumentClient;
 
+  my $dynamodb = PawsX::DynamoDB::DocumentClient->new();
+
+  $dynamodb->put(
+      TableName => 'users',
+      Item => {
+          user_id => 24,
+          email => 'bob@example.com',
+          roles => ['admin', 'finance'],
+      },
+  );
+
+  my $user = $dynamodb->get(
+      TableName => 'users',
+      Key => {
+          user_id => 24,
+      },
+  );
+
 =head1 DESCRIPTION
 
-PawsX::DynamoDB::DocumentClient is
+Paws (in this author's opinion) is to best and most up-to-date way of working with AWS. However, reading and writing DynamoDB items via Paws' low-level API calls can involve a lot of busy work formatting your data structures to includd DynamoDB types.
+
+This module simplifies some DynamoDB operations by automatically converting back and forth between simpler Perl data structures and the request/response data structures used by Paws.
+
+For more information about how data structures are transformed, see L<Net::Amazon::DynamoDB::Marshaler>.
+
+This module is based on a similar class in the L<AWS JavaScript SDK|http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html>
+
+=head1 METHODS
+
+=head2 new
+
+  my $dynamodb = PawsX::DynamoDB::DocumentClient->new(
+      paws => $paws, # a Paws object
+  );
+
+This class method returns a new PawsX::DynamoDB::DocumentClient object. It takes an optional parameter "paws" in case you want to use a customized Paws object (e.g. for custom authentication).
+
+=head2 batch_get
+
+  my $result = $dynamodb->batch_get(
+      RequestItems => {
+          $table_name => {
+              Keys => [
+                  { user_id => 1000 },
+                  { user_id => 1001 },
+              ],
+          },
+      },
+  );
+
+Returns the attributes of one or more items from one or more tables by delegating to Paws::DynamoDB::BatchGetItem().
+
+=head2 batch_write
+
+  my $result = $dynamodb->batch_write(
+      RequestItems => {
+          $table_name => [
+              {
+                  PutRequest => {
+                      Item => {
+                          user_id => 1000,
+                          email => 'jdoe@example.com',
+                      },
+                  },
+              },
+              {
+                  DeleteRequest => {
+                      Key => {
+                          user_id => 1001,
+                      },
+                  },
+              },
+          ],
+      },
+  );
+
+Puts or deletes multiple items in one or more tables by delegating to Paws::DynamoDB::BatchWriteItem().
+
+=head2 delete
+
+  my $result = $dynamodb->delete(
+      TableName => 'users',
+      Key => {
+          user_id => 1001,
+      },
+  );
+
+Deletes a single item in a table by primary key by delegating to Paws::DynamoDB::DeleteItem().
+
+=head2 get
+
+  my $result = $dynamodb->get(
+      TableName => 'users',
+      Key => {
+          user_id => 1000,
+      },
+  );
+
+Returns a set of attributes for the item with the given primary key by delegating to Paws::DynamoDB::GetItem().
+
+=head2 put
+
+  my $result = $dynamodb->put(
+      TableName => 'users',
+      Item => {
+          user_id => 1000,
+          email => 'jdoe@example.com',
+          tags => ['foo', 'bar', 'baz'],
+      },
+  );
+
+Creates a new item, or replaces an old item with a new item by delegating to Paws::DynamoDB::PutItem().
+
+=head2 query
+
+  my $result = $dynamodb->query(
+      TableName => 'users',
+      IndexName => 'company_id',
+      KeyConditionExpression => 'company_id = :company_id',
+      ExpressionAttributeValues => {
+          ':company_id' => 25,
+      },
+  );
+
+Directly access items from a table by primary key or a secondary index by delegating to Paws::DynamoDB::Query().
+
+=head2 scan
+
+  my $result = $dynamodb->scan(
+      TableName => 'users',
+      FilterExpression => 'first_name = :first_name',
+      ExpressionAttributeValues => {
+          ':first_name' => 'John',
+      },
+  );
+
+Returns one or more items and item attributes by accessing every item in a table or a secondary index by delegating to Paws::DynamoDB::Scan().
+
+=head2 update
+
+  my $result = $dynamodb->update(
+      TableName => 'users',
+      Key: {
+          user_id => 1000,
+      },
+      UpdateExpression: 'SET status = :new_status',
+      ExpressionAttributeValues => {
+          ':new_status' => 'active',
+      },
+  );
+
+Edits an existing item's attributes, or adds a new item to the table if it does not already exist by delegating to Paws::DynamoDB::UpdateItem().
 
 =head1 AUTHOR
 
