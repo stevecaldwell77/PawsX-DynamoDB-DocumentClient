@@ -43,6 +43,12 @@ sub put {
     $self->_run_command($command_class, %args);
 }
 
+sub get {
+    my ($self, %args) = @_;
+    my $command_class = 'PawsX::DynamoDB::DocumentClient::Get';
+    $self->_run_command($command_class, %args);
+}
+
 sub _service {
     my ($self) = @_;
     return $self->{paws}->service('DynamoDB');
@@ -192,6 +198,10 @@ Deletes a single item in a table by primary key by delegating to Paws::DynamoDB:
 
 Returns a set of attributes for the item with the given primary key by delegating to Paws::DynamoDB::GetItem().
 
+The following arguments are marshalled: 'Key'.
+
+By default (return_paws_output not set), returns the fetched item as an unmarshalled hashref, or undef if the item was not found.
+
 =head2 put
 
   my $result = $dynamodb->put(
@@ -207,7 +217,7 @@ Creates a new item, or replaces an old item with a new item by delegating to L<P
 
 The following arguments are marshalled: 'ExpressionAttributeValues', 'Item'.
 
-No return value unless return_paws_output is set.
+By default (return_paws_output not set), returns undef.
 
 =head2 query
 

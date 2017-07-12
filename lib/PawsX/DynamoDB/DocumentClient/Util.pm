@@ -4,9 +4,12 @@ use strict;
 use 5.008_005;
 
 use parent qw(Exporter);
-our @EXPORT_OK = qw(make_arg_transformer);
+our @EXPORT_OK = qw(make_arg_transformer make_attr_map unmarshal_attribute_map);
 
 use Net::Amazon::DynamoDB::Marshaler;
+use Paws::DynamoDB::AttributeValue;
+use Paws::DynamoDB::AttributeMap;
+use Paws::DynamoDB::MapAttributeValue;
 
 sub make_arg_transformer {
     my %args = @_;
@@ -20,6 +23,57 @@ sub make_arg_transformer {
             unless ref $val && ref $val eq 'HASH';
         return dynamodb_marshal($val);
     };
+}
+
+sub unmarshal_attribute_map {
+    my ($map) = @_;
+    my $plain_vals = _translate_attr_map($map->Map);
+    return dynamodb_unmarshal($plain_vals);
+}
+
+sub make_attr_map {
+    my ($attrs) = @_;
+    my %map = map { $_ => _make_attr_val($attrs->{$_}) } keys %$attrs;
+    return Paws::DynamoDB::AttributeMap->new(Map => \%map);
+}
+
+sub _translate_attr_map {
+    my ($map) = @_;
+    return { map { $_ => _translate_attr_val($map->{$_}) } keys %$map };
+}
+
+sub _translate_attr_val {
+    my ($attr_val) = @_;
+    return { $_ => $attr_val->$_ } for grep { defined $attr_val->$_ }
+        qw(NULL S N BOOL B BS NS SS);
+    return { M => _translate_attr_map($attr_val->M->Map) }
+        if defined $attr_val->M;
+    return { L => [ map { _translate_attr_val($_) } @{ $attr_val->L } ] }
+        if defined $attr_val->L;
+    die 'unable to extract value out of Paws::DynamoDB::AttributeValue object!';
+}
+
+sub _make_attr_val {
+    my ($type_and_val) = @_;
+    my ($type, $val) = %$type_and_val;
+    if ($type eq 'L') {
+        my @list = map { _make_attr_val($_) } @$val;
+        return Paws::DynamoDB::AttributeValue->new(
+            L => \@list,
+        );
+    }
+    if ($type eq 'M') {
+        my %map = map { $_ => _make_attr_val($val->{$_}) } keys %$val;
+        return Paws::DynamoDB::AttributeValue->new(
+            M => Paws::DynamoDB::MapAttributeValue->new(
+                Map => \%map,
+            ),
+        );
+    }
+    return Paws::DynamoDB::AttributeValue->new(
+        L => [], # Paws always returns an empty list
+        $type => $val,
+    );
 }
 
 1;
