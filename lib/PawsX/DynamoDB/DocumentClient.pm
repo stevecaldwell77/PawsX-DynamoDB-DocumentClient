@@ -2,7 +2,45 @@ package PawsX::DynamoDB::DocumentClient;
 
 use strict;
 use 5.008_005;
+
+use Net::Amazon::DynamoDB::Marshaler;
+use Scalar::Util qw(blessed);
+use Paws;
+
 our $VERSION = '0.01';
+
+sub new {
+    my ($class, %args) = @_;
+    my $region = $args{region} || $ENV{AWS_DEFAULT_REGION};
+    my $paws = $args{paws};
+
+    if ($paws && !(blessed($paws) && $paws->isa('Paws'))) {
+        die "paws must be a Paws object";
+    }
+
+    if (!$region && $paws) {
+        $region = $paws->config->region;
+    }
+
+    if (!$region) {
+        die "unable to determine region";
+    }
+
+    if (!$paws) {
+        $paws = Paws->new(config => { region => $region});
+    }
+
+    my $self = {
+        paws => $paws,
+    };
+
+    return bless $self, $class;
+}
+
+sub _service {
+    my ($self) = @_;
+    return $self->paws->service('DynamoDB');
+}
 
 1;
 __END__
@@ -50,10 +88,20 @@ This module is based on a similar class in the L<AWS JavaScript SDK|http://docs.
 =head2 new
 
   my $dynamodb = PawsX::DynamoDB::DocumentClient->new(
-      paws => $paws, # a Paws object
+      region => 'us-east-1',
   );
 
-This class method returns a new PawsX::DynamoDB::DocumentClient object. It takes an optional parameter "paws" in case you want to use a customized Paws object (e.g. for custom authentication).
+This class method returns a new PawsX::DynamoDB::DocumentClient object. It accepts the following parameters:
+
+=head3 paws
+
+A Paws object to use to create the Paws::DynamoDB service object. Optional. Available in case you need to custom configuration of Paws (e.g. authentication).
+
+=head3 region
+
+The AWS region to use when creating the Paws::DynamoDB service object. If not specified, will try to grab from the AWS_DEFAULT_REGION	environment variable. Will be ignored if provided with a paws object that has a region configured.
+
+If we can't figure out what region to use, an error will be thrown.
 
 =head2 batch_get
 
