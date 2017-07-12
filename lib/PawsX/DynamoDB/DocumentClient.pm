@@ -257,6 +257,10 @@ Puts or deletes multiple items in one or more tables by delegating to L<Paws::Dy
 
 Deletes a single item in a table by primary key by delegating to L<Paws::DynamoDB::DeleteItem>.
 
+The following arguments are marshalled: 'ExpressionAttributeValues', 'Key'.
+
+By default (return_paws_output not set), returns undef, unless the 'ReturnValues' argument was set to 'ALL_OLD', in which case an unmarshalled hashref of how the item looked prior to deletion is returned.
+
 =head2 get
 
   my $result = $dynamodb->get(
