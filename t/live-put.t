@@ -28,5 +28,17 @@ is(
     undef,
     'put() lives',
 );
+is($output, undef, 'no output by default');
+
+is(
+    exception {
+        $output = $dynamodb->put(%args, return_paws_output => 1);
+    },
+    undef,
+    'put() lives, w/ return_paws_output set',
+);
+
+isa_ok($output, 'Paws::DynamoDB::PutItemOutput',
+    'output object returned when return_paws_output is set');
 
 done_testing;
