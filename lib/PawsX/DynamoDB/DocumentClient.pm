@@ -142,7 +142,7 @@ PawsX::DynamoDB::DocumentClient - a simplified way of working with AWS DynamoDB 
 
 =head1 DESCRIPTION
 
-Paws (in this author's opinion) is to best and most up-to-date way of working with AWS. However, reading and writing DynamoDB items via Paws' low-level API calls can involve a lot of busy work formatting your data structures to include DynamoDB types.
+Paws (in this author's opinion) is the best and most up-to-date way of working with AWS. However, reading and writing DynamoDB items via Paws' low-level API calls can involve a lot of busy work formatting your data structures to include DynamoDB types.
 
 This module simplifies some DynamoDB operations by automatically converting back and forth between simpler Perl data structures and the request/response data structures used by Paws.
 
