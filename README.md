@@ -40,6 +40,23 @@ By default, the methods below return plain values (or nothing) that make normal 
 
 For use cases where you need more extensive output data, every method supports a return\_paws\_output flag, which will return the Paws object instead.
 
+    my $item = $dynamodb->get(
+        TableName => 'users',
+        Key => {
+            user_id => 1000,
+        },
+    );
+    # $item looks like { user_id => 1000, email => 'foo@bar.com', ... }
+
+    my $output = $dynamodb->get(
+        TableName => 'users',
+        Key => {
+            user_id => 1000,
+        },
+        return_paws_output => 1,
+    );
+    # $output isa Paws::DynamoDB::GetItemOutput
+
 # METHODS
 
 ## new
