@@ -44,12 +44,27 @@ is(
 
 {
     local $ENV{AWS_DEFAULT_REGION} = undef;
+    my $paws = Paws->new(config => { region => 'us-east-1' });
+    my $service = $paws->service('DynamoDB');
+    is(
+        exception {
+            my $dynamodb = PawsX::DynamoDB::DocumentClient->new(
+                dynamodb => $service,
+            );
+        },
+        undef,
+        'constructor lives if given Paws::DynamoDB object',
+    );
+}
+
+{
+    local $ENV{AWS_DEFAULT_REGION} = undef;
     like(
         exception {
             my $dynamodb = PawsX::DynamoDB::DocumentClient->new();
         },
         qr/unable to determine region/,
-        'error thrown if no region specified',
+        'error thrown if no region or dynamodb object specified',
     );
 }
 

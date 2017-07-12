@@ -13,25 +13,35 @@ sub new {
     my ($class, %args) = @_;
     my $region = $args{region} || $ENV{AWS_DEFAULT_REGION};
     my $paws = $args{paws};
+    my $dynamodb = $args{dynamodb};
 
     if ($paws && !(blessed($paws) && $paws->isa('Paws'))) {
         die "paws must be a Paws object";
+    }
+
+    if ($dynamodb && !(blessed($dynamodb) && $dynamodb->isa('Paws::DynamoDB'))) {
+        die "dynamodb must be a Paws::DynamoDB object";
     }
 
     if (!$region && $paws) {
         $region = $paws->config->region;
     }
 
-    if (!$region) {
-        die "unable to determine region";
+    if (!($dynamodb || $region)) {
+        die "unable to determine region, and no dynamodb object provided";
     }
 
     if (!$paws) {
         $paws = Paws->new(config => { region => $region});
     }
 
+    if (!$dynamodb) {
+        $dynamodb = $paws->service('DynamoDB');
+    }
+
     my $self = {
         paws => $paws,
+        dynamodb => $dynamodb,
     };
 
     return bless $self, $class;
@@ -85,18 +95,13 @@ sub update {
     $self->_run_command($command_class, %args);
 }
 
-sub _service {
-    my ($self) = @_;
-    return $self->{paws}->service('DynamoDB');
-}
-
 sub _run_command {
     my ($self, $command_class, %args) = @_;
     my $return_paws_output = delete $args{return_paws_output} || 0;
 
     require_module($command_class);
 
-    my $service = $self->_service;
+    my $service = $self->{dynamodb};
     my %service_args = $command_class->transform_arguments(%args);
     my $output = $command_class->run_service_command($service, %service_args);
 
@@ -165,9 +170,13 @@ This class method returns a new PawsX::DynamoDB::DocumentClient object. It accep
 
 A Paws object to use to create the Paws::DynamoDB service object. Optional. Available in case you need to custom configuration of Paws (e.g. authentication).
 
+=head3 dynamodb
+
+Alternatively, you can provide a Paws::DynamoDB service object directly if you have one. Optional. If given, the 'paws' parameter will be ignored.
+
 =head3 region
 
-The AWS region to use when creating the Paws::DynamoDB service object. If not specified, will try to grab from the AWS_DEFAULT_REGION	environment variable. Will be ignored if provided with a paws object that has a region configured.
+The AWS region to use when creating the Paws::DynamoDB service object. If not specified, will try to grab from the AWS_DEFAULT_REGION	environment variable. Will be ignored if the object is constructed with a dynamodb object, or with a paws object that has a region configured.
 
 If the constructor can't figure out what region to use, an error will be thrown.
 
