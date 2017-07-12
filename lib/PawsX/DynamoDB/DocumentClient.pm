@@ -356,4 +356,10 @@ it under the same terms as Perl itself.
 
 =back
 
+=head1 ACKNOWLEDGEMENTS
+
+Thanks to L<Campus Explorer|http://www.campusexplorer.com>, who allowed me to release this code as open source.
+
+Thanks to Jose Luis Martinez Torres (JLMARTIN), for suggesions (and for Paws!)
+
 =cut

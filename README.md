@@ -54,9 +54,13 @@ This class method returns a new PawsX::DynamoDB::DocumentClient object. It accep
 
 A Paws object to use to create the Paws::DynamoDB service object. Optional. Available in case you need to custom configuration of Paws (e.g. authentication).
 
+### dynamodb
+
+Alternatively, you can provide a Paws::DynamoDB service object directly if you have one. Optional. If given, the 'paws' parameter will be ignored.
+
 ### region
 
-The AWS region to use when creating the Paws::DynamoDB service object. If not specified, will try to grab from the AWS\_DEFAULT\_REGION	environment variable. Will be ignored if provided with a paws object that has a region configured.
+The AWS region to use when creating the Paws::DynamoDB service object. If not specified, will try to grab from the AWS\_DEFAULT\_REGION	environment variable. Will be ignored if the object is constructed with a dynamodb object, or with a paws object that has a region configured.
 
 If the constructor can't figure out what region to use, an error will be thrown.
 
@@ -228,3 +232,9 @@ it under the same terms as Perl itself.
 - [Paws::DynamoDB](https://metacpan.org/pod/Paws::DynamoDB)
 - [Net::Amazon::DynamoDB::Marshaler](https://metacpan.org/pod/Net::Amazon::DynamoDB::Marshaler)
 - [DocumentClient](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html) in the AWS JavaScript SDK.
+
+# ACKNOWLEDGEMENTS
+
+Thanks to [Campus Explorer](http://www.campusexplorer.com), who allowed me to release this code as open source.
+
+Thanks to Jose Luis Martinez Torres (JLMARTIN), for suggesions (and for Paws!)
