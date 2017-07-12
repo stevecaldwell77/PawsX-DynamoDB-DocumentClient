@@ -186,6 +186,31 @@ If the constructor can't figure out what region to use, an error will be thrown.
 
 Returns the attributes of one or more items from one or more tables by delegating to L<Paws::DynamoDB::BatchGetItem>.
 
+The following arguments are marshalled: values in 'RequestItems.$table_name.Keys'.
+
+By default (return_paws_output not set), returns a hashref that looks like:
+
+  {
+      responses => {
+          $table_name => [
+              {...} # unmarshalled item
+              ...
+          ],
+      },
+      unprocessed_keys => {
+          $table_name => {
+              Keys => [
+                  { ... }, # unmarshalled key
+                  ...
+              ],
+              ProjectionExpression => '...',
+              ConsistentRead => $boolean,
+          }
+      }
+  }
+
+unprocessed_keys can be fed back into a new call to batch_get(). See L<Paws::DynamoDB::BatchGetItemOutput> for more infomation.
+
 =head2 batch_write
 
   my $result = $dynamodb->batch_write(

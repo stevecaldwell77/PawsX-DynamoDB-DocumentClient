@@ -4,12 +4,20 @@ use strict;
 use 5.008_005;
 
 use parent qw(Exporter);
-our @EXPORT_OK = qw(make_arg_transformer make_attr_map unmarshal_attribute_map);
+our @EXPORT_OK = qw(
+    make_arg_transformer
+    make_attr_map
+    make_attr_name_map
+    make_key
+    unmarshal_attribute_map
+);
 
 use Net::Amazon::DynamoDB::Marshaler;
 use Paws::DynamoDB::AttributeValue;
 use Paws::DynamoDB::AttributeMap;
+use Paws::DynamoDB::ExpressionAttributeNameMap;
 use Paws::DynamoDB::MapAttributeValue;
+use Paws::DynamoDB::Key;
 
 sub make_arg_transformer {
     my %args = @_;
@@ -35,6 +43,21 @@ sub make_attr_map {
     my ($attrs) = @_;
     my %map = map { $_ => _make_attr_val($attrs->{$_}) } keys %$attrs;
     return Paws::DynamoDB::AttributeMap->new(Map => \%map);
+}
+
+sub make_key {
+    my ($val) = @_;
+    my %map = map { $_ => _make_attr_val($val->{$_}) } keys %$val;
+    return Paws::DynamoDB::Key->new(
+        Map => \%map
+    );
+}
+
+sub make_attr_name_map {
+    my ($names) = @_;
+    return Paws::DynamoDB::ExpressionAttributeNameMap->new(
+        Map => $names,
+    );
 }
 
 sub _translate_attr_map {
