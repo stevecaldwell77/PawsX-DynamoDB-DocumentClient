@@ -3,7 +3,6 @@ package PawsX::DynamoDB::DocumentClient;
 use strict;
 use 5.008_005;
 
-use Net::Amazon::DynamoDB::Marshaler;
 use Scalar::Util qw(blessed);
 use Paws;
 
@@ -82,6 +81,12 @@ This module simplifies some DynamoDB operations by automatically converting back
 For more information about how data structures are transformed, see L<Net::Amazon::DynamoDB::Marshaler>.
 
 This module is based on a similar class in the L<AWS JavaScript SDK|http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html>
+
+=head2 outputs
+
+By default, the methods below return plain values (or nothing) that make normal use cases simpler, as opposed to the output objects that Paws generates. For example, get() returns a hashref of the item's data, as opposed to a L<Paws::DynamoDB::GetItemOutput> object.
+
+For use cases where you need more extensive output data, every method supports a return_paws_output flag, which will return the Paws object instead.
 
 =head1 METHODS
 
@@ -177,7 +182,11 @@ Returns a set of attributes for the item with the given primary key by delegatin
       },
   );
 
-Creates a new item, or replaces an old item with a new item by delegating to Paws::DynamoDB::PutItem().
+Creates a new item, or replaces an old item with a new item by delegating to L<Paws::DynamoDB::PutItem>.
+
+The following arguments are marshalled: 'ExpressionAttributeValues', 'Item'.
+
+No return value unless return_paws_output is set.
 
 =head2 query
 
