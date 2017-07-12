@@ -141,6 +141,10 @@ Puts or deletes multiple items in one or more tables by delegating to [Paws::Dyn
 
 Deletes a single item in a table by primary key by delegating to [Paws::DynamoDB::DeleteItem](https://metacpan.org/pod/Paws::DynamoDB::DeleteItem).
 
+The following arguments are marshalled: 'ExpressionAttributeValues', 'Key'.
+
+By default (return\_paws\_output not set), returns undef, unless the 'ReturnValues' argument was set to 'ALL\_OLD', in which case an unmarshalled hashref of how the item looked prior to deletion is returned.
+
 ## get
 
     my $result = $dynamodb->get(
