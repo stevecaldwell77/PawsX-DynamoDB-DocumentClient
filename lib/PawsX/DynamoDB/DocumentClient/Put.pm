@@ -21,5 +21,10 @@ sub transform_output {
     return undef;
 }
 
+sub run_service_command {
+    my ($class, $service, %args) = @_;
+    return $service->PutItem(%args);
+}
+
 1;
 __END__

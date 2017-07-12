@@ -2,7 +2,6 @@ use strict;
 use warnings;
 use Test::More;
 
-use Paws;
 use Paws::DynamoDB::PutItemOutput;
 
 my $class;

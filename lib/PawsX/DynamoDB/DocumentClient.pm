@@ -3,6 +3,7 @@ package PawsX::DynamoDB::DocumentClient;
 use strict;
 use 5.008_005;
 
+use Module::Runtime qw(require_module);
 use Scalar::Util qw(blessed);
 use Paws;
 
@@ -36,9 +37,29 @@ sub new {
     return bless $self, $class;
 }
 
+sub put {
+    my ($self, %args) = @_;
+    my $command_class = 'PawsX::DynamoDB::DocumentClient::Put';
+    $self->_run_command($command_class, %args);
+}
+
 sub _service {
     my ($self) = @_;
-    return $self->paws->service('DynamoDB');
+    return $self->{paws}->service('DynamoDB');
+}
+
+sub _run_command {
+    my ($self, $command_class, %args) = @_;
+    my $return_paws_output = delete $args{return_paws_output} || 0;
+
+    require_module($command_class);
+
+    my $service = $self->_service;
+    my %service_args = $command_class->transform_arguments(%args);
+    my $output = $command_class->run_service_command($service, %service_args);
+
+    return $output if $return_paws_output;
+    return $command_class->transform_output($output);
 }
 
 1;
