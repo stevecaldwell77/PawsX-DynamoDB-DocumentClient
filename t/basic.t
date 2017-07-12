@@ -1,8 +1,56 @@
 use strict;
+use warnings;
 use Test::More;
-use PawsX::DynamoDB::DocumentClient;
+use Test::Fatal;
 
-# replace with the actual test
-ok 1;
+use Paws;
+
+BEGIN { use_ok('PawsX::DynamoDB::DocumentClient'); }
+
+is(
+    exception {
+        my $dynamodb = PawsX::DynamoDB::DocumentClient->new(
+            region => 'us-east-1',
+        );
+    },
+    undef,
+    'constructor lives if region specified',
+);
+
+{
+    local $ENV{AWS_DEFAULT_REGION} = 'us-east-1';
+    is(
+        exception {
+            my $dynamodb = PawsX::DynamoDB::DocumentClient->new();
+        },
+        undef,
+        'constructor lives if region specified in envar',
+    );
+}
+
+{
+    local $ENV{AWS_DEFAULT_REGION} = undef;
+    my $paws = Paws->new(config => { region => 'us-east-1' });
+    is(
+        exception {
+            my $dynamodb = PawsX::DynamoDB::DocumentClient->new(
+                paws => $paws,
+            );
+        },
+        undef,
+        'constructor lives if given Paws object with region',
+    );
+}
+
+{
+    local $ENV{AWS_DEFAULT_REGION} = undef;
+    like(
+        exception {
+            my $dynamodb = PawsX::DynamoDB::DocumentClient->new();
+        },
+        qr/unable to determine region/,
+        'error thrown if no region specified',
+    );
+}
 
 done_testing;

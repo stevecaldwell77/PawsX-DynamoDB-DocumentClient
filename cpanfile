@@ -5,5 +5,6 @@ requires 'Paws';
 requires 'Scalar::Util';
 
 on test => sub {
+    requires 'Test::Fatal';
     requires 'Test::More', '0.96';
 };
