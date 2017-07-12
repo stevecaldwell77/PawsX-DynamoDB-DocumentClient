@@ -26,13 +26,13 @@ PawsX::DynamoDB::DocumentClient - a simplified way of working with AWS DynamoDB 
 
 # DESCRIPTION
 
-Paws (in this author's opinion) is to best and most up-to-date way of working with AWS. However, reading and writing DynamoDB items via Paws' low-level API calls can involve a lot of busy work formatting your data structures to includd DynamoDB types.
+Paws (in this author's opinion) is to best and most up-to-date way of working with AWS. However, reading and writing DynamoDB items via Paws' low-level API calls can involve a lot of busy work formatting your data structures to include DynamoDB types.
 
 This module simplifies some DynamoDB operations by automatically converting back and forth between simpler Perl data structures and the request/response data structures used by Paws.
 
-For more information about how data structures are transformed, see [Net::Amazon::DynamoDB::Marshaler](https://metacpan.org/pod/Net::Amazon::DynamoDB::Marshaler).
+For more information about how types are mananged, see [Net::Amazon::DynamoDB::Marshaler](https://metacpan.org/pod/Net::Amazon::DynamoDB::Marshaler).
 
-This module is based on a similar class in the [AWS JavaScript SDK](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html)
+This module is based on a similar class in the [AWS JavaScript SDK](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html).
 
 ## outputs
 
@@ -58,7 +58,7 @@ A Paws object to use to create the Paws::DynamoDB service object. Optional. Avai
 
 The AWS region to use when creating the Paws::DynamoDB service object. If not specified, will try to grab from the AWS\_DEFAULT\_REGION	environment variable. Will be ignored if provided with a paws object that has a region configured.
 
-If we can't figure out what region to use, an error will be thrown.
+If the constructor can't figure out what region to use, an error will be thrown.
 
 ## batch\_get
 
@@ -198,3 +198,8 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 # SEE ALSO
+
+- [Paws](https://metacpan.org/pod/Paws)
+- [Paws::DynamoDB](https://metacpan.org/pod/Paws::DynamoDB)
+- [Net::Amazon::DynamoDB::Marshaler](https://metacpan.org/pod/Net::Amazon::DynamoDB::Marshaler)
+- [DocumentClient](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html) in the AWS JavaScript SDK.
