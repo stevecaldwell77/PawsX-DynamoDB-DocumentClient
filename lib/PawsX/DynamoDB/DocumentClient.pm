@@ -37,15 +37,51 @@ sub new {
     return bless $self, $class;
 }
 
-sub put {
+sub batch_get {
     my ($self, %args) = @_;
-    my $command_class = 'PawsX::DynamoDB::DocumentClient::Put';
+    my $command_class = 'PawsX::DynamoDB::DocumentClient::BatchGet';
+    $self->_run_command($command_class, %args);
+}
+
+sub batch_write {
+    my ($self, %args) = @_;
+    my $command_class = 'PawsX::DynamoDB::DocumentClient::BatchWrite';
+    $self->_run_command($command_class, %args);
+}
+
+sub delete {
+    my ($self, %args) = @_;
+    my $command_class = 'PawsX::DynamoDB::DocumentClient::Delete';
     $self->_run_command($command_class, %args);
 }
 
 sub get {
     my ($self, %args) = @_;
     my $command_class = 'PawsX::DynamoDB::DocumentClient::Get';
+    $self->_run_command($command_class, %args);
+}
+
+sub put {
+    my ($self, %args) = @_;
+    my $command_class = 'PawsX::DynamoDB::DocumentClient::Put';
+    $self->_run_command($command_class, %args);
+}
+
+sub query {
+    my ($self, %args) = @_;
+    my $command_class = 'PawsX::DynamoDB::DocumentClient::Query';
+    $self->_run_command($command_class, %args);
+}
+
+sub scan {
+    my ($self, %args) = @_;
+    my $command_class = 'PawsX::DynamoDB::DocumentClient::Scan';
+    $self->_run_command($command_class, %args);
+}
+
+sub update {
+    my ($self, %args) = @_;
+    my $command_class = 'PawsX::DynamoDB::DocumentClient::Update';
     $self->_run_command($command_class, %args);
 }
 
