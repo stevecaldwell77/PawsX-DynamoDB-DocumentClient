@@ -184,7 +184,7 @@ If the constructor can't figure out what region to use, an error will be thrown.
       },
   );
 
-Returns the attributes of one or more items from one or more tables by delegating to Paws::DynamoDB::BatchGetItem().
+Returns the attributes of one or more items from one or more tables by delegating to L<Paws::DynamoDB::BatchGetItem>.
 
 =head2 batch_write
 
@@ -210,7 +210,7 @@ Returns the attributes of one or more items from one or more tables by delegatin
       },
   );
 
-Puts or deletes multiple items in one or more tables by delegating to Paws::DynamoDB::BatchWriteItem().
+Puts or deletes multiple items in one or more tables by delegating to L<Paws::DynamoDB::BatchWriteItem>.
 
 =head2 delete
 
@@ -221,7 +221,7 @@ Puts or deletes multiple items in one or more tables by delegating to Paws::Dyna
       },
   );
 
-Deletes a single item in a table by primary key by delegating to Paws::DynamoDB::DeleteItem().
+Deletes a single item in a table by primary key by delegating to L<Paws::DynamoDB::DeleteItem>.
 
 =head2 get
 
@@ -232,7 +232,7 @@ Deletes a single item in a table by primary key by delegating to Paws::DynamoDB:
       },
   );
 
-Returns a set of attributes for the item with the given primary key by delegating to Paws::DynamoDB::GetItem().
+Returns a set of attributes for the item with the given primary key by delegating to L<Paws::DynamoDB::GetItem>.
 
 The following arguments are marshalled: 'Key'.
 
@@ -266,7 +266,7 @@ By default (return_paws_output not set), returns undef.
       },
   );
 
-Directly access items from a table by primary key or a secondary index by delegating to Paws::DynamoDB::Query().
+Directly access items from a table by primary key or a secondary index by delegating to L<Paws::DynamoDB::Query>.
 
 =head2 scan
 
@@ -278,7 +278,7 @@ Directly access items from a table by primary key or a secondary index by delega
       },
   );
 
-Returns one or more items and item attributes by accessing every item in a table or a secondary index by delegating to Paws::DynamoDB::Scan().
+Returns one or more items and item attributes by accessing every item in a table or a secondary index by delegating to L<Paws::DynamoDB::Scan>.
 
 =head2 update
 
@@ -293,7 +293,7 @@ Returns one or more items and item attributes by accessing every item in a table
       },
   );
 
-Edits an existing item's attributes, or adds a new item to the table if it does not already exist by delegating to Paws::DynamoDB::UpdateItem().
+Edits an existing item's attributes, or adds a new item to the table if it does not already exist by delegating to L<Paws::DynamoDB::UpdateItem>.
 
 =head1 AUTHOR
 

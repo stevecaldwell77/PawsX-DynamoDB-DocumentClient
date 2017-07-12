@@ -73,7 +73,7 @@ If the constructor can't figure out what region to use, an error will be thrown.
         },
     );
 
-Returns the attributes of one or more items from one or more tables by delegating to Paws::DynamoDB::BatchGetItem().
+Returns the attributes of one or more items from one or more tables by delegating to [Paws::DynamoDB::BatchGetItem](https://metacpan.org/pod/Paws::DynamoDB::BatchGetItem).
 
 ## batch\_write
 
@@ -99,7 +99,7 @@ Returns the attributes of one or more items from one or more tables by delegatin
         },
     );
 
-Puts or deletes multiple items in one or more tables by delegating to Paws::DynamoDB::BatchWriteItem().
+Puts or deletes multiple items in one or more tables by delegating to [Paws::DynamoDB::BatchWriteItem](https://metacpan.org/pod/Paws::DynamoDB::BatchWriteItem).
 
 ## delete
 
@@ -110,7 +110,7 @@ Puts or deletes multiple items in one or more tables by delegating to Paws::Dyna
         },
     );
 
-Deletes a single item in a table by primary key by delegating to Paws::DynamoDB::DeleteItem().
+Deletes a single item in a table by primary key by delegating to [Paws::DynamoDB::DeleteItem](https://metacpan.org/pod/Paws::DynamoDB::DeleteItem).
 
 ## get
 
@@ -121,7 +121,7 @@ Deletes a single item in a table by primary key by delegating to Paws::DynamoDB:
         },
     );
 
-Returns a set of attributes for the item with the given primary key by delegating to Paws::DynamoDB::GetItem().
+Returns a set of attributes for the item with the given primary key by delegating to [Paws::DynamoDB::GetItem](https://metacpan.org/pod/Paws::DynamoDB::GetItem).
 
 The following arguments are marshalled: 'Key'.
 
@@ -155,7 +155,7 @@ By default (return\_paws\_output not set), returns undef.
         },
     );
 
-Directly access items from a table by primary key or a secondary index by delegating to Paws::DynamoDB::Query().
+Directly access items from a table by primary key or a secondary index by delegating to [Paws::DynamoDB::Query](https://metacpan.org/pod/Paws::DynamoDB::Query).
 
 ## scan
 
@@ -167,7 +167,7 @@ Directly access items from a table by primary key or a secondary index by delega
         },
     );
 
-Returns one or more items and item attributes by accessing every item in a table or a secondary index by delegating to Paws::DynamoDB::Scan().
+Returns one or more items and item attributes by accessing every item in a table or a secondary index by delegating to [Paws::DynamoDB::Scan](https://metacpan.org/pod/Paws::DynamoDB::Scan).
 
 ## update
 
@@ -182,7 +182,7 @@ Returns one or more items and item attributes by accessing every item in a table
         },
     );
 
-Edits an existing item's attributes, or adds a new item to the table if it does not already exist by delegating to Paws::DynamoDB::UpdateItem().
+Edits an existing item's attributes, or adds a new item to the table if it does not already exist by delegating to [Paws::DynamoDB::UpdateItem](https://metacpan.org/pod/Paws::DynamoDB::UpdateItem).
 
 # AUTHOR
 
