@@ -211,18 +211,6 @@ By default (return\_paws\_output not set), returns undef.
 
 Directly access items from a table by primary key or a secondary index by delegating to [Paws::DynamoDB::Query](https://metacpan.org/pod/Paws::DynamoDB::Query).
 
-## scan
-
-    my $result = $dynamodb->scan(
-        TableName => 'users',
-        FilterExpression => 'first_name = :first_name',
-        ExpressionAttributeValues => {
-            ':first_name' => 'John',
-        },
-    );
-
-Returns one or more items and item attributes by accessing every item in a table or a secondary index by delegating to [Paws::DynamoDB::Scan](https://metacpan.org/pod/Paws::DynamoDB::Scan).
-
 The following arguments are marshalled: 'ExclusiveStartKey', 'ExpressionAttributeValues'.
 
 By default (return\_paws\_output not set), returns a hashref that looks like:
@@ -239,6 +227,18 @@ By default (return\_paws\_output not set), returns a hashref that looks like:
     }
 
 last\_evaluated\_key has a value if the query has more items to fetch. It can be used for the 'ExclusiveStartKey' value for a subsequent query.
+
+## scan
+
+    my $result = $dynamodb->scan(
+        TableName => 'users',
+        FilterExpression => 'first_name = :first_name',
+        ExpressionAttributeValues => {
+            ':first_name' => 'John',
+        },
+    );
+
+Returns one or more items and item attributes by accessing every item in a table or a secondary index by delegating to [Paws::DynamoDB::Scan](https://metacpan.org/pod/Paws::DynamoDB::Scan).
 
 ## update
 
