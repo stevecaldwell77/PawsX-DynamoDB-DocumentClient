@@ -3,11 +3,15 @@ package PawsX::DynamoDB::DocumentClient::Scan;
 use strict;
 use 5.008_005;
 
-use PawsX::DynamoDB::DocumentClient::Util qw(make_arg_transformer);
+use aliased 'PawsX::DynamoDB::DocumentClient::QueryOrScan';
+
+use PawsX::DynamoDB::DocumentClient::Util qw(
+    make_arg_transformer
+);
 
 my $arg_transformer = make_arg_transformer(
     method_name => 'scan',
-    to_marshall => [],
+    to_marshall => QueryOrScan->to_marshall,
 );
 
 sub transform_arguments {
@@ -17,8 +21,8 @@ sub transform_arguments {
 }
 
 sub transform_output {
-    my ($class, $output) = @_;
-    return undef;
+    my $class = shift;
+    return QueryOrScan->transform_output(@_);
 }
 
 sub run_service_command {

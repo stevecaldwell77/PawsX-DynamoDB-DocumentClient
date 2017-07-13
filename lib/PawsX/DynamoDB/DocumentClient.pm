@@ -356,6 +356,10 @@ last_evaluated_key has a value if the query has more items to fetch. It can be u
 
 Returns one or more items and item attributes by accessing every item in a table or a secondary index by delegating to L<Paws::DynamoDB::Scan>.
 
+The following arguments are marshalled: 'ExclusiveStartKey', 'ExpressionAttributeValues'.
+
+Returns the same hashref as returned by query().
+
 =head2 update
 
   my $result = $dynamodb->update(
