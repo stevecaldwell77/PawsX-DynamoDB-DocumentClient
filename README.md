@@ -223,6 +223,23 @@ Directly access items from a table by primary key or a secondary index by delega
 
 Returns one or more items and item attributes by accessing every item in a table or a secondary index by delegating to [Paws::DynamoDB::Scan](https://metacpan.org/pod/Paws::DynamoDB::Scan).
 
+The following arguments are marshalled: 'ExclusiveStartKey', 'ExpressionAttributeValues'.
+
+By default (return\_paws\_output not set), returns a hashref that looks like:
+
+    {
+        items => [
+            { ... }, # unmarshalled item
+            ...
+        ],
+        last_evaluated_key => {
+            ... # unmarshalled key
+        },
+        count => $count,
+    }
+
+last\_evaluated\_key has a value if the query has more items to fetch. It can be used for the 'ExclusiveStartKey' value for a subsequent query.
+
 ## update
 
     my $result = $dynamodb->update(
