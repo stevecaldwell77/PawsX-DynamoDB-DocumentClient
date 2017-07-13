@@ -147,6 +147,10 @@ unprocessed\_keys can be fed back into a new call to batch\_get(). See [Paws::Dy
 
 Puts or deletes multiple items in one or more tables by delegating to [Paws::DynamoDB::BatchWriteItem](https://metacpan.org/pod/Paws::DynamoDB::BatchWriteItem).
 
+The following arguments are marshalled: Items in PutRequests, Keys in DeleteRequests.
+
+By default (return\_paws\_output not set), returns a hashref of unprocessed items, in the same format as the RequestItems parameters. The unprocessed items are meant to be fed back into a new call to batch\_write(). See [Paws::DynamoDB::BatchWriteItemOutput](https://metacpan.org/pod/Paws::DynamoDB::BatchWriteItemOutput) for more information.
+
 ## delete
 
     my $result = $dynamodb->delete(
