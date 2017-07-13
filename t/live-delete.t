@@ -7,6 +7,9 @@ use warnings;
 use PawsX::DynamoDB::DocumentClient;
 use UUID::Tiny ':std';
 
+# Expected table:
+#   Partition key: user_id (String)
+
 my $table_name = $ENV{TEST_DYNAMODB_TABLE}
     || die "please set TEST_DYNAMODB_TABLE";
 
