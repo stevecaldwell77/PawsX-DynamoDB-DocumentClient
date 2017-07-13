@@ -12,7 +12,7 @@ sub transform_arguments {
     my %args = @_;
     return (
         %args,
-        RequestItems => _transform_request_items($args{RequestItems}),
+        RequestItems => _marshall_request_items($args{RequestItems}),
     );
 }
 
@@ -20,8 +20,8 @@ sub transform_output {
     my ($class, $output) = @_;
     my $response = $output->Responses;
     return {
-        responses => _transform_responses($output->Responses),
-        unprocessed_keys => _transform_unproc_keys($output->UnprocessedKeys),
+        responses => _unmarshall_responses($output->Responses),
+        unprocessed_keys => _unmarshall_unproc_keys($output->UnprocessedKeys),
     };
 }
 
@@ -30,12 +30,12 @@ sub run_service_command {
     return $service->BatchGetItem(%args);
 }
 
-sub _transform_request_items {
+sub _marshall_request_items {
     my ($items) = @_;
-    return { map { $_ => _transform_request_item($items->{$_}) } keys %$items };
+    return { map { $_ => _marshall_request_item($items->{$_}) } keys %$items };
 }
 
-sub _transform_request_item {
+sub _marshall_request_item {
     my ($item) = @_;
     return {
         %$item,
@@ -43,32 +43,32 @@ sub _transform_request_item {
     };
 }
 
-sub _transform_responses {
+sub _unmarshall_responses {
     my ($responses) = @_;
     return undef unless $responses;
     my $tables = $responses->Map;
     return {
-        map { $_ => _transform_response_items($tables->{$_}) }
+        map { $_ => _unmarshall_response_items($tables->{$_}) }
         keys %$tables
     };
 }
 
-sub _transform_response_items {
+sub _unmarshall_response_items {
     my ($items) = @_;
     return [ map { unmarshal_attribute_map($_) } @$items ];
 }
 
-sub _transform_unproc_keys {
+sub _unmarshall_unproc_keys {
     my ($unprocessed) = @_;
     my $tables = $unprocessed->Map;
     return undef unless %$tables;
     return {
-        map { $_ => _transform_keys_and_attrs($tables->{$_}) }
+        map { $_ => _unmarshall_keys_and_attrs($tables->{$_}) }
         keys %$tables
     };
 }
 
-sub _transform_keys_and_attrs {
+sub _unmarshall_keys_and_attrs {
     my ($obj) = @_;
     my $attr_names;
     if ($obj->ExpressionAttributeNames) {
