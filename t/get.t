@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use Test::Fatal;
 use Test::More;
 
 use Paws::DynamoDB::GetItemOutput;
@@ -66,6 +67,16 @@ is_deeply(
         },
     },
     'unmarshalled item returned by default',
+);
+
+like(
+    exception {
+        $class->transform_arguments(
+            Key => 'foobar',
+        );
+    },
+    qr/\Qget(): Key must be a hashref\E/,
+    'error thrown on bad Key',
 );
 
 done_testing;
