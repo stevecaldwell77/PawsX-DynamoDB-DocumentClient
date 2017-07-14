@@ -3,11 +3,11 @@ package PawsX::DynamoDB::DocumentClient::Update;
 use strict;
 use 5.008_005;
 
-use PawsX::DynamoDB::DocumentClient::Util qw(make_arg_transformer);
+use PawsX::DynamoDB::DocumentClient::Util qw(make_arg_transformer unmarshal_attribute_map);
 
 my $arg_transformer = make_arg_transformer(
     method_name => 'update',
-    to_marshall => [],
+    to_marshall => ['ExpressionAttributeValues', 'Key'],
 );
 
 sub transform_arguments {
@@ -18,6 +18,10 @@ sub transform_arguments {
 
 sub transform_output {
     my ($class, $output) = @_;
+    if ($output->Attributes) {
+        my $item = unmarshal_attribute_map($output->Attributes);
+        return $item if %$item;
+    }
     return undef;
 }
 

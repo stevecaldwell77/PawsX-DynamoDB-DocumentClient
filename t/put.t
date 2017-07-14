@@ -48,7 +48,7 @@ is(
     'nothing returned by default',
 );
 
-my $test_output = Paws::DynamoDB::PutItemOutput->new(
+$test_output = Paws::DynamoDB::PutItemOutput->new(
     Attributes => make_attr_map({
         user_id => { N => 100 },
         username => { S => 'foobar' },

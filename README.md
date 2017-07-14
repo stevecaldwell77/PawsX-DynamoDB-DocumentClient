@@ -196,7 +196,7 @@ Creates a new item, or replaces an old item with a new item by delegating to [Pa
 
 The following arguments are marshalled: 'ExpressionAttributeValues', 'Item'.
 
-By default (return\_paws\_output not set), returns undef.
+By default (return\_paws\_output not set), returns undef. If 'ReturnValues' is set to 'ALL\_OLD', returns an unmarshalled hashref of the item as it appeared before the put.
 
 ## query
 
@@ -258,6 +258,10 @@ Returns the same hashref as returned by query().
     );
 
 Edits an existing item's attributes, or adds a new item to the table if it does not already exist by delegating to [Paws::DynamoDB::UpdateItem](https://metacpan.org/pod/Paws::DynamoDB::UpdateItem).
+
+The following arguments are marshalled: 'ExpressionAttributeValues', 'Key'.
+
+By default (return\_paws\_output not set), returns undef. If 'ReturnValues' is set to something other than 'NONE', returns an unmarshalled hashref of the item as it appeared before the put.
 
 # AUTHOR
 

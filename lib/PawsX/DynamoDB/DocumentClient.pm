@@ -375,6 +375,10 @@ Returns the same hashref as returned by query().
 
 Edits an existing item's attributes, or adds a new item to the table if it does not already exist by delegating to L<Paws::DynamoDB::UpdateItem>.
 
+The following arguments are marshalled: 'ExpressionAttributeValues', 'Key'.
+
+By default (return_paws_output not set), returns undef. If 'ReturnValues' is set to something other than 'NONE', returns an unmarshalled hashref of the item as it appeared before the put.
+
 =head1 AUTHOR
 
 Steve Caldwell E<lt>scaldwell@gmail.comE<gt>
