@@ -312,7 +312,7 @@ Creates a new item, or replaces an old item with a new item by delegating to L<P
 
 The following arguments are marshalled: 'ExpressionAttributeValues', 'Item'.
 
-By default (return_paws_output not set), returns undef.
+By default (return_paws_output not set), returns undef. If 'ReturnValues' is set to 'ALL_OLD', returns an unmarshalled hashref of the item as it appeared before the put.
 
 =head2 query
 

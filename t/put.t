@@ -3,6 +3,7 @@ use warnings;
 use Test::More;
 
 use Paws::DynamoDB::PutItemOutput;
+use PawsX::DynamoDB::DocumentClient::Util qw(make_attr_map);
 
 my $class;
 BEGIN {
@@ -45,6 +46,21 @@ is(
     $class->transform_output($test_output),
     undef,
     'nothing returned by default',
+);
+
+my $test_output = Paws::DynamoDB::PutItemOutput->new(
+    Attributes => make_attr_map({
+        user_id => { N => 100 },
+        username => { S => 'foobar' },
+    }),
+);
+is_deeply(
+    $class->transform_output($test_output),
+    {
+        user_id => 100,
+        username => 'foobar',
+    },
+    'Attributes unmarshalled and returned if present',
 );
 
 done_testing;

@@ -15,12 +15,15 @@ my $table_name = $ENV{TEST_DYNAMODB_TABLE}
 
 my $dynamodb = PawsX::DynamoDB::DocumentClient->new();
 
+my $user_id = create_uuid_as_string();
+my $item = {
+    user_id => $user_id,
+    email => 'jdoe@example.com',
+};
+
 my %args = (
     TableName => $table_name,
-    Item => {
-        user_id => create_uuid_as_string(),
-        email => 'jdoe@example.com',
-    },
+    Item => $item,
 );
 
 my $output;
@@ -43,5 +46,25 @@ is(
 
 isa_ok($output, 'Paws::DynamoDB::PutItemOutput',
     'output object returned when return_paws_output is set');
+
+is(
+    exception {
+        $output = $dynamodb->put(
+            TableName => $table_name,
+            Item => {
+                %$item,
+                email => 'bsmith@example.com',
+            },
+            ReturnValues => 'ALL_OLD',
+        );
+    },
+    undef,
+    'put() lives',
+);
+is_deeply(
+    $output,
+    $item,
+    q|old item returned when ReturnValues == 'ALL_OLD'|,
+);
 
 done_testing;
