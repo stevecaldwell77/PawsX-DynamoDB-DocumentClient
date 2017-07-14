@@ -32,6 +32,11 @@ sub run_service_command {
 
 sub _marshall_request_items {
     my ($tables) = @_;
+    die 'batch_write(): RequestItems must be a hashref' unless (
+        $tables
+        && ref $tables
+        && ref $tables eq 'HASH'
+    );
     return {
         map { $_ => _marshall_request_items_list($tables->{$_}) }
         keys %$tables
@@ -40,34 +45,69 @@ sub _marshall_request_items {
 
 sub _marshall_request_items_list {
     my ($requests) = @_;
+    die 'batch_write(): RequestItems value must be an arrayref' unless (
+        $requests
+        && ref $requests
+        && ref $requests eq 'ARRAY'
+    );
     return [ map { _marshall_request($_) } @$requests ];
 }
 
 sub _marshall_request {
     my ($request) = @_;
-    my ($type, $val) = %$request;
-    return $type eq 'PutRequest' ? _marshall_put_request($request)
-                                 : _marshall_delete_request($request);
+
+    die 'batch_write(): write request must be a hashref' unless (
+        $request
+        && ref $request
+        && ref $request eq 'HASH'
+    );
+
+    my $put_request = $request->{PutRequest};
+    my $delete_request = $request->{DeleteRequest};
+
+    die 'batch_write(): write request missing PutRequest or DeleteRequest'
+        unless ($put_request || $delete_request);
+
+    return _marshall_put_request($put_request) if $put_request;
+    return _marshall_delete_request($delete_request);
 }
 
 sub _marshall_put_request {
-    my ($request) = @_;
-    my ($type, $val) = %$request;
+    my ($val) = @_;
+    die 'batch_write(): PutRequest must be a hashref' unless (
+        $val
+        && ref $val
+        && ref $val eq 'HASH'
+    );
+    my $item = $val->{Item};
+    die 'batch_write(): PutRequest must contain Item' unless $item;
+    die q|batch_write(): PutRequest's Item must be a hashref| unless (
+        ref $item
+        && ref $item eq 'HASH'
+    );
     return {
-        $type => {
-            %$val,
-            Item => dynamodb_marshal($val->{Item}),
+        PutRequest => {
+            Item => dynamodb_marshal($item),
         },
     };
 }
 
 sub _marshall_delete_request {
-    my ($request) = @_;
-    my ($type, $val) = %$request;
+    my ($val) = @_;
+    die 'batch_write(): DeleteRequest must be a hashref' unless (
+        $val
+        && ref $val
+        && ref $val eq 'HASH'
+    );
+    my $key = $val->{Key};
+    die 'batch_write(): DeleteRequest must contain Key' unless $key;
+    die q|batch_write(): DeleteRequest's Key must be a hashref| unless (
+        ref $key
+        && ref $key eq 'HASH'
+    );
     return {
-        $type => {
-            %$val,
-            Key => dynamodb_marshal($val->{Key}),
+        DeleteRequest => {
+            Key => dynamodb_marshal($key),
         },
     };
 }
