@@ -4,7 +4,15 @@ use strict;
 use 5.008_005;
 
 use Net::Amazon::DynamoDB::Marshaler;
-use PawsX::DynamoDB::DocumentClient::Util qw(unmarshal_attribute_map);
+use PawsX::DynamoDB::DocumentClient::Util qw(
+    make_assert_arrayref
+    make_assert_hashref
+    unmarshal_attribute_map
+);
+
+my $METHOD_NAME = 'batch_write()';
+my $ASSERT_HASHREF = make_assert_hashref($METHOD_NAME);
+my $ASSERT_ARRAYREF = make_assert_arrayref($METHOD_NAME);
 
 sub transform_arguments {
     my $class = shift;
@@ -32,11 +40,7 @@ sub run_service_command {
 
 sub _marshall_request_items {
     my ($tables) = @_;
-    die 'batch_write(): RequestItems must be a hashref' unless (
-        $tables
-        && ref $tables
-        && ref $tables eq 'HASH'
-    );
+    $ASSERT_HASHREF->('RequestItems', $tables);
     return {
         map { $_ => _marshall_request_items_list($tables->{$_}) }
         keys %$tables
@@ -45,27 +49,17 @@ sub _marshall_request_items {
 
 sub _marshall_request_items_list {
     my ($requests) = @_;
-    die 'batch_write(): RequestItems value must be an arrayref' unless (
-        $requests
-        && ref $requests
-        && ref $requests eq 'ARRAY'
-    );
+    $ASSERT_ARRAYREF->('RequestItems value', $requests);
     return [ map { _marshall_request($_) } @$requests ];
 }
 
 sub _marshall_request {
     my ($request) = @_;
-
-    die 'batch_write(): write request must be a hashref' unless (
-        $request
-        && ref $request
-        && ref $request eq 'HASH'
-    );
-
+    $ASSERT_HASHREF->('write request', $request);
     my $put_request = $request->{PutRequest};
     my $delete_request = $request->{DeleteRequest};
 
-    die 'batch_write(): write request missing PutRequest or DeleteRequest'
+    die "$METHOD_NAME: write request missing PutRequest or DeleteRequest"
         unless ($put_request || $delete_request);
 
     return _marshall_put_request($put_request) if $put_request;
@@ -74,17 +68,10 @@ sub _marshall_request {
 
 sub _marshall_put_request {
     my ($val) = @_;
-    die 'batch_write(): PutRequest must be a hashref' unless (
-        $val
-        && ref $val
-        && ref $val eq 'HASH'
-    );
+    $ASSERT_HASHREF->('PutRequest', $val);
     my $item = $val->{Item};
-    die 'batch_write(): PutRequest must contain Item' unless $item;
-    die q|batch_write(): PutRequest's Item must be a hashref| unless (
-        ref $item
-        && ref $item eq 'HASH'
-    );
+    die "$METHOD_NAME: PutRequest must contain Item" unless $item;
+    $ASSERT_HASHREF->(q|PutRequest's Item|, $item);
     return {
         PutRequest => {
             Item => dynamodb_marshal($item),
@@ -94,17 +81,10 @@ sub _marshall_put_request {
 
 sub _marshall_delete_request {
     my ($val) = @_;
-    die 'batch_write(): DeleteRequest must be a hashref' unless (
-        $val
-        && ref $val
-        && ref $val eq 'HASH'
-    );
+    $ASSERT_HASHREF->(q|DeleteRequest|, $val);
     my $key = $val->{Key};
-    die 'batch_write(): DeleteRequest must contain Key' unless $key;
-    die q|batch_write(): DeleteRequest's Key must be a hashref| unless (
-        ref $key
-        && ref $key eq 'HASH'
-    );
+    die "$METHOD_NAME: DeleteRequest must contain Key" unless $key;
+    $ASSERT_HASHREF->(q|DeleteRequest's Key|, $key);
     return {
         DeleteRequest => {
             Key => dynamodb_marshal($key),

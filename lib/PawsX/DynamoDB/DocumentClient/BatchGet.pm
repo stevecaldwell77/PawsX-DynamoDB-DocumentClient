@@ -4,8 +4,16 @@ use strict;
 use 5.008_005;
 
 use Net::Amazon::DynamoDB::Marshaler;
-use PawsX::DynamoDB::DocumentClient::Util qw(unmarshal_attribute_map);
+use PawsX::DynamoDB::DocumentClient::Util qw(
+    make_assert_arrayref
+    make_assert_hashref
+    unmarshal_attribute_map
+);
 use PerlX::Maybe;
+
+my $METHOD_NAME = 'batch_get()';
+my $ASSERT_HASHREF = make_assert_hashref($METHOD_NAME);
+my $ASSERT_ARRAYREF = make_assert_arrayref($METHOD_NAME);
 
 sub transform_arguments {
     my $class = shift;
@@ -32,25 +40,17 @@ sub run_service_command {
 
 sub _marshall_request_items {
     my ($items) = @_;
-    die 'batch_get(): RequestItems must be a hashref' unless (
-        $items
-        && ref $items
-        && ref $items eq 'HASH'
-    );
+    $ASSERT_HASHREF->('RequestItems', $items);
     return { map { $_ => _marshall_request_item($items->{$_}) } keys %$items };
 }
 
 sub _marshall_request_item {
     my ($item) = @_;
     my $keys = $item->{Keys};
-    die 'batch_get(): RequestItems entry must have Keys' unless $keys;
-    die 'batch_get(): Keys must be arrayref' unless (
-        ref $keys
-        && ref $keys eq 'ARRAY'
-    );
-    die 'batch_get(): Keys entries must be hashrefs'
-        for grep { !(ref $_ && ref $_ eq 'HASH') }
-        @$keys;
+    die "$METHOD_NAME: RequestItems entry must have Keys" unless $keys;
+    $ASSERT_ARRAYREF->('Keys', $keys);
+    $ASSERT_HASHREF->('Keys entry', $_)
+        for @$keys;
     return {
         %$item,
         Keys => [ map { dynamodb_marshal($_) } @{$item->{Keys}} ],

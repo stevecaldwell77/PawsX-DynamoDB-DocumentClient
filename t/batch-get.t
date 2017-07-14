@@ -174,7 +174,7 @@ like(
             },
         );
     },
-    qr/\Qbatch_get(): Keys must be arrayref\E/,
+    qr/\Qbatch_get(): Keys must be an arrayref\E/,
     'error thrown on bad Keys',
 );
 
@@ -190,7 +190,7 @@ like(
             },
         );
     },
-    qr/\Qbatch_get(): Keys entries must be hashrefs\E/,
+    qr/\Qbatch_get(): Keys entry must be a hashref\E/,
     'error thrown on bad Keys entry',
 );
 

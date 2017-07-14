@@ -9,6 +9,8 @@ our @EXPORT_OK = qw(
     make_attr_map
     make_attr_name_map
     make_key
+    make_assert_arrayref
+    make_assert_hashref
     unmarshal_attribute_map
 );
 
@@ -58,6 +60,30 @@ sub make_attr_name_map {
     return Paws::DynamoDB::ExpressionAttributeNameMap->new(
         Map => $names,
     );
+}
+
+sub make_assert_arrayref {
+    my ($prefix) = @_;
+    return sub {
+        my ($label, $val) = @_;
+        die "$prefix: $label must be an arrayref" unless (
+            $val
+            && ref $val
+            && ref $val eq 'ARRAY'
+        );
+    }
+}
+
+sub make_assert_hashref {
+    my ($prefix) = @_;
+    return sub {
+        my ($label, $val) = @_;
+        die "$prefix: $label must be a hashref" unless (
+            $val
+            && ref $val
+            && ref $val eq 'HASH'
+        );
+    }
 }
 
 sub _translate_attr_map {
