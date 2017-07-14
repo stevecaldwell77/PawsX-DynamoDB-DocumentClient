@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use Test::Fatal;
 use Test::More;
 
 use Paws::DynamoDB::DeleteItemOutput;
@@ -58,6 +59,26 @@ is_deeply(
         epoch => 1499884956,
     },
     'unmarshalled attributes returned if found in output',
+);
+
+like(
+    exception {
+        $class->transform_arguments(
+            ExpressionAttributeValues => 'foobar',
+        );
+    },
+    qr/\Qdelete(): ExpressionAttributeValues must be a hashref\E/,
+    'error thrown on bad ExpressionAttributeValues',
+);
+
+like(
+    exception {
+        $class->transform_arguments(
+            Key => 'foobar',
+        );
+    },
+    qr/\Qdelete(): Key must be a hashref\E/,
+    'error thrown on bad Key',
 );
 
 done_testing;
