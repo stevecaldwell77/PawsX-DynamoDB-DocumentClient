@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use Test::Fatal;
 use Test::More;
 
 use Paws::DynamoDB::UpdateItemOutput;
@@ -58,5 +59,26 @@ is_deeply(
     },
     'Attributes unmarshalled and returned if present',
 );
+
+like(
+    exception {
+        $class->transform_arguments(
+            ExpressionAttributeValues => 'asdf',
+        );
+    },
+    qr/\Qupdate(): ExpressionAttributeValues must be a hashref\E/,
+    'error thrown on bad Key',
+);
+
+like(
+    exception {
+        $class->transform_arguments(
+            Key => 'asdf',
+        );
+    },
+    qr/\Qupdate(): Key must be a hashref\E/,
+    'error thrown on bad Key',
+);
+
 
 done_testing;
