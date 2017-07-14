@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use Test::Fatal;
 use Test::More;
 
 use Paws::DynamoDB::QueryOutput;
@@ -147,6 +148,26 @@ is_deeply(
         items => [],
     },
     'count-only output handled correctly',
+);
+
+like(
+    exception {
+        $class->transform_arguments(
+            ExpressionAttributeValues => 'asdf',
+        );
+    },
+    qr/\Qquery(): ExpressionAttributeValues must be a hashref\E/,
+    'error thrown on bad ExpressionAttributeValues',
+);
+
+like(
+    exception {
+        $class->transform_arguments(
+            ExclusiveStartKey => 'asdf',
+        );
+    },
+    qr/\Qquery(): ExclusiveStartKey must be a hashref\E/,
+    'error thrown on bad ExclusiveStartKey',
 );
 
 done_testing;
