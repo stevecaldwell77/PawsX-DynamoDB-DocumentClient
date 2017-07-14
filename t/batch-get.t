@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use Test::Fatal;
 use Test::More;
 
 use Paws::DynamoDB::BatchGetItemOutput;
@@ -138,6 +139,59 @@ is_deeply(
         }
     },
     'output transformed correctly',
+);
+
+like(
+    exception {
+        $class->transform_arguments(
+            RequestItems => 'asds',
+        );
+    },
+    qr/\Qbatch_get(): RequestItems must be a hashref\E/,
+    'error thrown on bad RequestItems',
+);
+
+like(
+    exception {
+        $class->transform_arguments(
+            RequestItems => {
+                'foo' => {
+                },
+            },
+        );
+    },
+    qr/\Qbatch_get(): RequestItems entry must have Keys\E/,
+    'error thrown on missing Keys',
+);
+
+like(
+    exception {
+        $class->transform_arguments(
+            RequestItems => {
+                'foo' => {
+                    Keys => 'asdf',
+                },
+            },
+        );
+    },
+    qr/\Qbatch_get(): Keys must be arrayref\E/,
+    'error thrown on bad Keys',
+);
+
+like(
+    exception {
+        $class->transform_arguments(
+            RequestItems => {
+                'foo' => {
+                    Keys => [
+                        'asdf',
+                    ],
+                },
+            },
+        );
+    },
+    qr/\Qbatch_get(): Keys entries must be hashrefs\E/,
+    'error thrown on bad Keys entry',
 );
 
 done_testing;

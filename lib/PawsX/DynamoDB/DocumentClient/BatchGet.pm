@@ -32,11 +32,25 @@ sub run_service_command {
 
 sub _marshall_request_items {
     my ($items) = @_;
+    die 'batch_get(): RequestItems must be a hashref' unless (
+        $items
+        && ref $items
+        && ref $items eq 'HASH'
+    );
     return { map { $_ => _marshall_request_item($items->{$_}) } keys %$items };
 }
 
 sub _marshall_request_item {
     my ($item) = @_;
+    my $keys = $item->{Keys};
+    die 'batch_get(): RequestItems entry must have Keys' unless $keys;
+    die 'batch_get(): Keys must be arrayref' unless (
+        ref $keys
+        && ref $keys eq 'ARRAY'
+    );
+    die 'batch_get(): Keys entries must be hashrefs'
+        for grep { !(ref $_ && ref $_ eq 'HASH') }
+        @$keys;
     return {
         %$item,
         Keys => [ map { dynamodb_marshal($_) } @{$item->{Keys}} ],
