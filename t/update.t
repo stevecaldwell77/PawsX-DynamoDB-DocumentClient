@@ -67,7 +67,7 @@ like(
         );
     },
     qr/\Qupdate(): ExpressionAttributeValues must be a hashref\E/,
-    'error thrown on bad Key',
+    'error thrown on bad ExpressionAttributeValues',
 );
 
 like(

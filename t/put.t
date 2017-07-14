@@ -71,7 +71,7 @@ like(
         );
     },
     qr/\Qput(): ExpressionAttributeValues must be a hashref\E/,
-    'error thrown on bad Key',
+    'error thrown on bad ExpressionAttributeValues',
 );
 
 like(
@@ -81,7 +81,7 @@ like(
         );
     },
     qr/\Qput(): Item must be a hashref\E/,
-    'error thrown on bad Key',
+    'error thrown on bad Item',
 );
 
 done_testing;
