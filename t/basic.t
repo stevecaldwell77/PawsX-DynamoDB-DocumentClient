@@ -7,6 +7,9 @@ use Paws;
 
 BEGIN { use_ok('PawsX::DynamoDB::DocumentClient'); }
 
+$ENV{AWS_ACCESS_KEY_ID} = 'AAAAAAAAAAAA';
+$ENV{AWS_SECRET_ACCESS_KEY} = 'XXXXXXXXXXXXXXXXXXXX';
+
 is(
     exception {
         my $dynamodb = PawsX::DynamoDB::DocumentClient->new(
