@@ -2,5 +2,8 @@ Revision history for PawsX-DynamoDB-DocumentClient
 
 {{$NEXT}}
 
+0.02  2017-07-16 19:11:37 PDT
+        - Fix test.
+
 0.01  2017-07-15 16:27:55 MDT
         - Initial release

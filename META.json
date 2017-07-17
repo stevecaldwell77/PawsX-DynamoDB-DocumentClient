@@ -67,7 +67,7 @@
          "web" : "https://github.com/stevecaldwell77/PawsX-DynamoDB-DocumentClient"
       }
    },
-   "version" : "0.01",
+   "version" : "0.02",
    "x_contributors" : [
       "Stephen Caldwell <steve@campusexplorer.com>"
    ],
