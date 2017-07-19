@@ -7,7 +7,7 @@ use Module::Runtime qw(require_module);
 use Scalar::Util qw(blessed);
 use Paws;
 
-our $VERSION = '0.02';
+our $VERSION = '0.04';
 
 sub new {
     my ($class, %args) = @_;
