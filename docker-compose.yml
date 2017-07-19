@@ -3,5 +3,5 @@ services:
   development:
     build: .
     volumes:
-      - .:/opt/app
+      - .:/opt/PawsX-DynamoDB-DocumentClient
     env_file: .env
