@@ -1,6 +1,8 @@
 Revision history for PawsX-DynamoDB-DocumentClient
 
 {{$NEXT}}
+        - move some dependencies into 'develop' phase.
+        - add Docker setup
 
 0.02  2017-07-16 19:11:37 PDT
         - Fix test.
