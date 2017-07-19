@@ -1,0 +1,7 @@
+version: '3'
+services:
+  development:
+    build: .
+    volumes:
+      - .:/opt/app
+    env_file: .env
