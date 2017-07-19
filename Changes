@@ -1,6 +1,9 @@
 Revision history for PawsX-DynamoDB-DocumentClient
 
 {{$NEXT}}
+        - re-release due to git issues with 0.03 release
+
+0.03  2017-07-19 19:47:10 UTC
         - move some dependencies into 'develop' phase.
         - add Docker setup
 
