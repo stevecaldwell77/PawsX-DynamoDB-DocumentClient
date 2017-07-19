@@ -5,7 +5,7 @@ ENV APPUSER=app
 RUN adduser --system --shell /bin/false --disabled-password --disabled-login $APPUSER
 
 # Setup work dir
-ENV APPDIR=/opt/app
+ENV APPDIR=/opt/PawsX-DynamoDB-DocumentClient
 RUN install -d -o $APPUSER $APPDIR
 
 # Install dependencies
