@@ -11,5 +11,9 @@ on test => sub {
     requires 'Test::DescribeMe';
     requires 'Test::Fatal';
     requires 'Test::More', '0.96';
+};
+
+on develop => sub {
+    requires 'Dist::Milla';
     requires 'UUID::Tiny';
 };
