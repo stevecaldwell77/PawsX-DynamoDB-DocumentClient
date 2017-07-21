@@ -39,7 +39,7 @@
       "runtime" : {
          "requires" : {
             "Module::Runtime" : "0",
-            "Net::Amazon::DynamoDB::Marshaler" : "0",
+            "Net::Amazon::DynamoDB::Marshaler" : "0.05",
             "Paws" : "0",
             "PerlX::Maybe" : "0",
             "Scalar::Util" : "0",

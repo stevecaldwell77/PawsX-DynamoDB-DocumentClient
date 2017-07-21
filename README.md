@@ -57,6 +57,10 @@ For use cases where you need more extensive output data, every method supports a
     );
     # $output isa Paws::DynamoDB::GetItemOutput
 
+## force\_type
+
+All methods take in an optional force\_type parameter, which gets passed to [Net::Amazon::DynamoDB::Marshaler](https://metacpan.org/pod/Net::Amazon::DynamoDB::Marshaler) for when you need to override its default typing. See the description of force\_type in that module's documentation for more details.
+
 # METHODS
 
 ## new
@@ -121,6 +125,32 @@ By default (return\_paws\_output not set), returns a hashref that looks like:
 
 unprocessed\_keys can be fed back into a new call to batch\_get(). See [Paws::DynamoDB::BatchGetItemOutput](https://metacpan.org/pod/Paws::DynamoDB::BatchGetItemOutput) for more infomation.
 
+A note on using force\_type with batch\_get() - force\_type should be a hashref of hashrefs, whose parent key is the table name, e.g.:
+
+    my $result = $dynamodb->batch_get(
+        RequestItems => {
+            users => {
+                Keys => [
+                    { username => 'jdoe' },
+                    { username => '2001' },
+                ],
+            },
+            zip_codes => {
+                Keys => [
+                    { zip_code => '03456' },
+                ],
+            },
+        },
+        force_type => {
+            users => {
+                username => 'S',
+            },
+            zip_codes => {
+                zip_code => 'S',
+            },
+        }
+    );
+
 ## batch\_write
 
     my $result = $dynamodb->batch_write(
@@ -150,6 +180,8 @@ Puts or deletes multiple items in one or more tables by delegating to [Paws::Dyn
 The following arguments are marshalled: Items in PutRequests, Keys in DeleteRequests.
 
 By default (return\_paws\_output not set), returns a hashref of unprocessed items, in the same format as the RequestItems parameters. The unprocessed items are meant to be fed back into a new call to batch\_write(). See [Paws::DynamoDB::BatchWriteItemOutput](https://metacpan.org/pod/Paws::DynamoDB::BatchWriteItemOutput) for more information.
+
+A note on using force\_type with batch\_write() - force\_type should be a hashref of hashrefs, whose parent key is the table name, just like batch\_get() above.
 
 ## delete
 
